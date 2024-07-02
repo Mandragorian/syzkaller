@@ -99,6 +99,7 @@ type Config struct {
 	DashboardClient string `json:"dashboard_client,omitempty"`
 	DashboardAddr   string `json:"dashboard_addr,omitempty"`
 	DashboardKey    string `json:"dashboard_key,omitempty"`
+	DashboardUserAgent string `json:"dashboard_user_agent,omitempty"`
 
 	// Location of the syzkaller checkout, syz-manager will look
 	// for binaries in bin subdir (does not have to be syzkaller checkout as
