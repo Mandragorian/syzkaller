@@ -13,6 +13,7 @@ import (
 	"io"
 	"math/rand"
 	"net"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -258,7 +259,26 @@ func RunManager(cfg *mgrconfig.Config) {
 	log.Logf(0, "serving rpc on tcp://%v", mgr.serv.Port)
 
 	if cfg.DashboardAddr != "" {
-		mgr.dash, err = dashapi.New(cfg.DashboardClient, cfg.DashboardAddr, cfg.DashboardKey)
+		ctor := http.NewRequest
+		if cfg.DashboardUserAgent != "" {
+			ctor = func(method, url string, body io.Reader) (*http.Request, error) {
+				req, err := http.NewRequest(method, url, body)
+				if err != nil {
+					return nil, err
+				}
+				req.Header.Add("User-Agent", cfg.DashboardUserAgent)
+				return req, nil
+			}
+		}
+		mgr.dash, err = dashapi.NewCustom(
+			cfg.DashboardClient,
+			cfg.DashboardAddr,
+			cfg.DashboardKey,
+			ctor,
+			http.DefaultClient.Do,
+			nil,
+			nil,
+		)
 		if err != nil {
 			log.Fatalf("failed to create dashapi connection: %v", err)
 		}
