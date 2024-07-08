@@ -47,7 +47,6 @@ func New(client, addr, key string, opts ...DashboardOpts) (*Dashboard, error) {
 				return req, nil
 			}
 		}
-
 	}
 	return NewCustom(client, addr, key, ctor, http.DefaultClient.Do, nil, nil)
 }

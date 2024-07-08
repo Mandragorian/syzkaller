@@ -30,7 +30,7 @@ func TestNewOpts(t *testing.T) {
 			}
 			dash, err := New("some_client", "some_addr", "some_key", opts...)
 			if err != nil {
-				t.Fatalf("New() returned unexpected error, got: %v, want: nil", err)
+				t.Fatalf("call to New() returned unexpected error, got: %v, want: nil", err)
 			}
 
 			req, err := dash.ctor("GET", "http://www.example.com", bytes.NewBuffer([]byte("body")))
@@ -40,7 +40,7 @@ func TestNewOpts(t *testing.T) {
 
 			got := req.Header.Get("User-Agent")
 			if got != test.userAgent {
-				t.Errorf("Created request has unexpected header. got: %s, want: 'Custom Agent/2.3'", got)
+				t.Errorf("created request has unexpected header. got: %s, want: 'Custom Agent/2.3'", got)
 			}
 		})
 	}
